@@ -1,6 +1,6 @@
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 
-const CountryCard=()=>{
+const CountryCard=({name,flag,altText })=>{
     return (
     <div style={{
         display:"flex",
@@ -17,25 +17,26 @@ const CountryCard=()=>{
 
     }}>
 
-        <img src="myFlag.jpg" alt="myFlag" style={{height:"100px", width:"100px"}} />
-        <h2>India</h2>
+        <img src={flag} alt={altText } style={{height:"100px", width:"100px"}} />
+        <h2>{name}</h2>  
 
 
     </div>)
 }
 
-const API_URL= "https://restcountries.com/v3.1/all"
+const API_URL= "https://xcountries-backend.azurewebsites.net/all"
 
 function Countries(){
 
     // const temp= [1,2,3,4,5,6,7,8];
+    const [countries, setCountries]= useState([]);
 
     useEffect(()=>{
         try{
             const fetchData= async ()=> {
-               const response= await fetch(API_UR);
+               const response= await fetch(API_URL);
                const jsonResponse= await response.json(); 
-               return jsonResponse; 
+               setCountries(jsonResponse);
 
             };
             fetchData();
@@ -57,7 +58,7 @@ function Countries(){
         }}>
 
       {
-        temp.map((value)=><CountryCard key={value}/>)
+        countries.map((country)=><CountryCard key={country.abbr} name={country.name} flag={country.flag} altText={country.abbr}/>)
         
     }
 
