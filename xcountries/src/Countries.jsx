@@ -30,24 +30,29 @@ function Countries(){
 
     // const temp= [1,2,3,4,5,6,7,8];
     const [countries, setCountries]= useState([]);
+    const [error,setError]=useState(null);
 
     useEffect(()=>{
+        const fetchData= async ()=> {
         try{
-            const fetchData= async ()=> {
+           
                const response= await fetch(API_URL);
+               if(!response.ok){
+                throw new Error(`Error: ${response.status} ${response.statusText}`);
+               }
                const jsonResponse= await response.json(); 
                setCountries(jsonResponse);
-
-            };
-            fetchData();
+            
 
 
         }
         catch(e){
             console.log("Error fetching data");
+            setError(e.message);
             
 
-        }
+        }};
+        fetchData();
 
     },[])
      
@@ -59,7 +64,13 @@ function Countries(){
 
         }}>
 
+           
+
       {
+        error? (
+            <p style={{color:"red"}}>"Error fetching data":{error}</p>
+        ):
+       
         countries.map((country)=><CountryCard key={country.abbr} name={country.name} flag={country.flag} altText={country.abbr}/>)
         
     }
