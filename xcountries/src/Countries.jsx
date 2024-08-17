@@ -47,7 +47,7 @@ function Countries(){
 
         }
         catch(e){
-            console.log("Error fetching data");
+            console.error("Error fetching data:",e.message);
             setError(e.message);
             
 
